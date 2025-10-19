@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản lý Key</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Quản lý Key (Google Sheet)</h2>
+    <p>Bạn có thể thêm/xóa key trực tiếp trong Google Sheet:</p>
+    <a id="sheetLink" target="_blank" class="btn">Mở Google Sheet</a>
+    <hr>
+    <button id="refreshBtn">Tải lại danh sách</button>
+    <ul id="keyList"></ul>
+  </div>
+
+  <script>
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/1rDIGPG9BvJh42Yp1COEJBKQzukYxGmo5p_9NpsPlryk/edit?usp=sharing";
+    const SHEET_EDIT_LINK = "https://docs.google.com/spreadsheets/d/1rDIGPG9BvJh42Yp1COEJBKQzukYxGmo5p_9NpsPlryk/edit?usp=sharing";
+
+    document.getElementById("sheetLink").href = SHEET_EDIT_LINK;
+
+    async function loadKeys() {
+      const res = await fetch(SHEET_URL);
+      const text = await res.text();
+      const keys = text.split('\n').slice(1).map(l => l.trim()).filter(Boolean);
+      const list = document.getElementById("keyList");
+      list.innerHTML = "";
+      keys.forEach(k => {
+        const li = document.createElement("li");
+        li.textContent = k;
+        list.appendChild(li);
+      });
+    }
+
+    document.getElementById("refreshBtn").onclick = loadKeys;
+    loadKeys();
+  </script>
+</body>
+</html>
